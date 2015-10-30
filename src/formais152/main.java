@@ -13,6 +13,7 @@ import formais152.Modelo.Gramatica;
 import formais152.Modelo.InputOutput;
 
 public class main {
+
 	static String menu = "a) opera��es de automatos finito\nb) opera��es de express�o regular\nc) opera��es de gramaticas\n\nDigite a op��o";
 	static String menuAutomato = "a)Ler automato\nb)determinizar\nc)Converter em gramatica\nd)Voltar";
 	static String menuExpressao = "a)Ler expressao\nb)transformar em Automato\nc)voltar";
@@ -151,5 +152,6 @@ public class main {
 		}
 
 	}
+
 
 }
