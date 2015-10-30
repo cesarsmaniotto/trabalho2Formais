@@ -13,7 +13,8 @@ import formais152.Modelo.Gramatica;
 import formais152.Modelo.InputOutput;
 
 public class main {
-	static String menu = "a) operações de automatos finito\nb) operações de expressão regular\nc) operações de gramaticas\n\nDigite a opção";
+
+	static String menu = "a) operaï¿½ï¿½es de automatos finito\nb) operaï¿½ï¿½es de expressï¿½o regular\nc) operaï¿½ï¿½es de gramaticas\n\nDigite a opï¿½ï¿½o";
 	static String menuAutomato = "a)Ler automato\nb)determinizar\nc)Converter em gramatica\nd)Voltar";
 	static String menuExpressao = "a)Ler expressao\nb)transformar em Automato\nc)voltar";
 	static String menuGramatica = "a)Ler gramatica\nb)transformar em Automato\nc)voltar";
@@ -66,7 +67,7 @@ public class main {
 			text = JOptionPane.showInputDialog(menuExpressao);
 		}
 		char option = text.charAt(0);
->>>>>>> master
+
 		
 		switch (option) {
 		case 'a': {
@@ -151,5 +152,6 @@ public class main {
 		}
 
 	}
+
 
 }
