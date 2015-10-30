@@ -81,22 +81,27 @@ public class InputOutput {
 	static public Expressao criarExpressao(String location) {
 		BufferedReader br = null;
 
-		String fullline = "";
+		String line = "";
+		String text="";
 		try {
 			br = new BufferedReader(new FileReader(location));
-			fullline = br.readLine();
-			while (fullline != null) {
-				if (fullline.length() != 0) {
-					fullline = fullline.trim();
-					return new Expressao(fullline);
+			line = br.readLine();
+			while (line != null) {
+
+				if (line.length() > 0) {
+					for(int i=0; i< line.length();i++){
+						if(line.charAt(i)!=' ')text+= line.charAt(i);
+					}
 				}
 			}
+			line = br.readLine();
+			
 
 			br.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return new Expressao(text);
 	}
 
 	static public Automato criarAutomato(String location) {
