@@ -81,22 +81,27 @@ public class InputOutput {
 	static public Expressao criarExpressao(String location) {
 		BufferedReader br = null;
 
-		String fullline = "";
+		String line = "";
+		String text="";
 		try {
 			br = new BufferedReader(new FileReader(location));
-			fullline = br.readLine();
-			while (fullline != null) {
-				if (fullline.length() != 0) {
-					fullline = fullline.trim();
-					return new Expressao(fullline);
+			line = br.readLine();
+			while (line != null) {
+
+				if (line.length() > 0) {
+					for(int i=0; i< line.length();i++){
+						if(line.charAt(i)!=' ')text+= line.charAt(i);
+					}
 				}
 			}
+			line = br.readLine();
+			
 
 			br.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return new Expressao(text);
 	}
 
 	static public Automato criarAutomato(String location) {
@@ -205,6 +210,39 @@ public class InputOutput {
 			e.printStackTrace();
 		}
 		return auto;
+	}
+	public static ArrayList<String> readFile(String location){
+		String line="";
+		ArrayList<String> lista = new ArrayList<String>();
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(location));
+			String fullline = br.readLine();
+			fullline= fullline.trim();
+			while (fullline != null) {
+				line = fullline;
+				
+				while (line.length() >0) {
+				
+					if(line.contains(" ")){
+						int pos =line.indexOf(" ");
+						String word = line.substring(0,pos);
+						line = line.substring(pos+1);
+						lista.add(word);
+					}else{
+						lista.add(line);
+						break;
+					}
+					
+				}
+				fullline = br.readLine();
+			}
+
+			br.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return lista;
+		
 	}
 
 }
