@@ -81,7 +81,11 @@ public class Automato implements Serializable {
         return estadoInicial;
     }
 
-    public boolean reconhecerSentenca(String sentenca) {
+	public Estado getEstadoInicial() {
+		return estadoInicial;
+	}
+
+	public boolean reconhecerSentenca(String sentenca) {
         return reconhecer(sentenca.replace("&", ""), estadoInicial);
     }
 
