@@ -93,8 +93,9 @@ public class InputOutput {
 						if(line.charAt(i)!=' ')text+= line.charAt(i);
 					}
 				}
+
+				line = br.readLine();
 			}
-			line = br.readLine();
 			
 
 			br.close();
