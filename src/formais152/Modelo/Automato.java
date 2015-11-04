@@ -297,6 +297,7 @@ public class Automato implements Serializable {
 			}
 		} // Inserção dos estados
 			// Seta o alfabeto do novo tal qual o do atual
+
 		novo.alfabeto = new ArrayList<>(this.alfabeto);
 		// Retira o & do alfabeto do novo
 		if (novo.alfabeto.contains('&')) {
@@ -305,24 +306,31 @@ public class Automato implements Serializable {
 
 		for (Iterator<Estado> i = this.estados.iterator(); i.hasNext();) {
 			Estado e = i.next();
+			System.out.println("Trabalhando com o estado " + e.getNome());
 			List<Estado> fechoE = e.getEpsilonFecho();
+
 			for (Iterator<Estado> i2 = fechoE.iterator(); i2.hasNext();) {
 				Estado es = i2.next();
+				System.out.println("EStado atual do &-fecho de " + e.getNome() + ": " + es.getNome());
+
 				for (Iterator<String> i3 = novo.alfabeto.iterator(); i3.hasNext();) {
 					String x = i3.next();
-					List<Estado> transEsX = es.getTransicoes().get(x); // estados
-																		// que
-																		// es
-																		// chega
-																		// por x
-					for (Iterator<Estado> i4 = transEsX.iterator(); i4.hasNext();) {
-						Estado destino = i4.next();
-						try {
-							novo.addTransicao(e.getNome(), x, destino.getNome());
-						} catch (Exception e1) {
-							System.out.println(
-									"O retirador de &-transicoes tentou criar uma transição de/para algum estado que nao existe");
-							e1.printStackTrace();
+					System.out.println("Simbolo a ser analisado: " + x);
+					List<Estado> transEsX = es.getTransicoes().get(x);
+					if (transEsX == null) {
+						System.out.println("O estado " + e.getNome() + " não tem transicao por " + x);
+					} else {
+						System.out.println("es tem " + transEsX.size() + "transicoes por " + x);
+						// estados que es chega por x
+						for (Iterator<Estado> i4 = transEsX.iterator(); i4.hasNext();) {
+							Estado destino = i4.next();
+							try {
+								novo.addTransicao(e.getNome(), x, destino.getNome());
+							} catch (Exception e1) {
+								System.out.println(
+										"O retirador de &-transicoes tentou criar uma transição de/para algum estado que nao existe");
+								e1.printStackTrace();
+							}
 						}
 					}
 				}
