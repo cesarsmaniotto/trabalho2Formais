@@ -8,9 +8,7 @@ public class FabricaDeAutomatos {
 		String esFinal="CONST";
 		
 		aut.addEstado("S0");
-		aut.addEstado(esFinal);
-		aut.addEstado("CONST2");
-		
+	
 		aut.addEstadoFinal(esFinal);
 		aut.addEstadoFinal("CONST2");
 		
@@ -18,14 +16,14 @@ public class FabricaDeAutomatos {
 			aut.setEstadoInicial("S0");
 			
 			for(int i=0; i<=9 ; i++){
-				String simb="";
-				simb+=i;
+				String simb=""+i;
+
 				aut.addTransicao("S0", simb, esFinal);
 				aut.addTransicao(esFinal, simb, esFinal);
 				aut.addTransicao("CONST2", simb, "CONST2");
 			}
-			String simb="";
-			simb+='.';
+			String simb=".";
+			
 			aut.addTransicao("S0", simb, "CONST2");
 			aut.addTransicao(esFinal, simb, "CONST2");
 			
@@ -34,14 +32,14 @@ public class FabricaDeAutomatos {
 			e.printStackTrace();
 		}
 
-		return aut;
+		return aut.obterAutomatoMinimo();
 	}
 	public static Automato automatoReservadas(){
 		Expressao exp=InputOutput.criarExpressao("palavrasReservadas.txt");
 		Automato aut = null; 
 		try {
 		    aut =exp.obterAutomato();
-			aut = aut.removerEpsilonTransicoes();
+		    aut = aut.removerEpsilonTransicoes();
 			aut = aut.determinizar();
 			aut = aut.obterAutomatoMinimo();
 	
@@ -56,46 +54,47 @@ public class FabricaDeAutomatos {
 		String esFinal="VAR";
 		
 		aut.addEstado("S0");
-		aut.addEstado(esFinal);
+
 		
 		aut.addEstadoFinal(esFinal);
 		
 		try {
 			aut.setEstadoInicial("S0");	
-			for(int i='a'; i<='z' ; i++){
-				String simb="";
-				simb+=i;
-				aut.addTransicao("S0", simb, esFinal);
-				aut.addTransicao(esFinal, simb, esFinal);
+			char minusc= 'a';
+			char maiusc = 'A';
+			for(int i=0; i<=25 ; i++){
+
+				char iterMin = minusc++;
+				char iterMaiusc = maiusc++;
+				
+				aut.addTransicao("S0", String.valueOf(iterMin), esFinal);
+				aut.addTransicao(esFinal, String.valueOf(iterMin), esFinal);
+				
+				aut.addTransicao("S0", String.valueOf(iterMaiusc), esFinal);
+				aut.addTransicao(esFinal, String.valueOf(iterMaiusc), esFinal);
 			}
-			for(int i='A'; i<='Z' ; i++){
-				String simb="";
-				simb+=i;
-				aut.addTransicao("S0", simb, esFinal);
-				aut.addTransicao(esFinal, simb, esFinal);
-			}
+			
 			for(int i=0; i<=9 ; i++){
-				String simb="";
-				simb+=i;
-				aut.addTransicao(esFinal, simb, esFinal);
+
+				aut.addTransicao(esFinal, String.valueOf(i), esFinal);
 			}
-			String simb="";
-			simb+='_';
+			String simb="_";
+
 			aut.addTransicao("S0", simb, esFinal);
 			aut.addTransicao(esFinal, simb, esFinal);	
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Automato res = automatoReservadas();
-		res = res.obterAutomatoFechamento();
+//		Automato res = automatoReservadas();
+//		res = res.obterAutomatoFechamento();
 		
-		aut = aut.interseccao(res);
-		aut = aut.removerEpsilonTransicoes();
-		aut = aut.determinizar();
+//		aut = aut.interseccao(res);
+//		aut = aut.removerEpsilonTransicoes();
+//		aut = aut.determinizar();
 		aut = aut.obterAutomatoMinimo();
 		
-
+//		aut = aut.interseccao(res);
 		return aut;
 	}
 	public static Automato automatoOperadoresBinarios(){
@@ -117,11 +116,11 @@ public class FabricaDeAutomatos {
 			aut.setEstadoInicial("S0");
 			
 			for(String simb: simbList){
-				simb="";
+				
 				aut.addTransicao("S0", simb, "OPERB2");
 			}
-			String simb="";
-			simb+='=';
+			String simb="=";
+
 			aut.addTransicao("OPERB2", simb, esFinal);
 	
 		} catch (Exception e) {
@@ -136,7 +135,6 @@ public class FabricaDeAutomatos {
 		String esFinal="MARGEN";
 		
 		aut.addEstado("S0");
-		aut.addEstado(esFinal);
 
 		aut.addEstadoFinal(esFinal);
 
@@ -146,7 +144,7 @@ public class FabricaDeAutomatos {
 			aut.setEstadoInicial("S0");
 			
 			for(String simb: simbList){
-				simb="";
+
 				aut.addTransicao("S0", simb, esFinal);
 			}
 		

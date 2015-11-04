@@ -14,8 +14,8 @@ public class AnalisadorLexico {
 	
 	private AutomatoAnaliseLexica automato;
 	
-	public AnalisadorLexico(AutomatoAnaliseLexica automato) {
-		this.automato = automato;
+	public AnalisadorLexico() {
+		
 	}
 	
 	public List<Pair<String, ItemLexico>> montaTabelaDeSimbolos(String programa) {
@@ -68,6 +68,25 @@ public class AnalisadorLexico {
 		
 		return new Pair<String, ItemLexico>(palavra, estado.getItensLexicos().get(0));
 		
+	}
+	
+	public void geraAutomato(){
+		
+	
+		Automato autVar = FabricaDeAutomatos.automatoVariaveis();
+		Automato autConst = FabricaDeAutomatos.automatoConstantes();
+		Automato autPr = FabricaDeAutomatos.automatoReservadas();
+		Automato autOp = FabricaDeAutomatos.automatoOperadoresBinarios();
+		Automato autMarg = FabricaDeAutomatos.automatoMargens();
+		
+//		Automato autUniao = autVar.uniao(autConst);
+//		autUniao = autUniao.uniao(autPr);
+//		autUniao = autUniao.uniao(autOp);
+//		autUniao = autUniao.uniao(autMarg);
+		
+	
+		
+		System.out.println(autVar);
 	}
 
 }

@@ -9,7 +9,7 @@ package formais152.Modelo;
  */
 public class AutomatoAnaliseLexica extends Automato {
 
-	private void adicionaEstadoDeErro() {
+	private void adicionarEstadoDeErro() {
 
 	}
 
