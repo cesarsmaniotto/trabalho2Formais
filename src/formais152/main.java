@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 
 import formais152.Modelo.Automato;
 import formais152.Modelo.Expressao;
+import formais152.Modelo.FabricaDeAutomatos;
 import formais152.Modelo.Gramatica;
 import formais152.Modelo.InputOutput;
 
@@ -23,8 +24,8 @@ public class main {
 	static Gramatica gramatica;
 
 	static void automato() {
-		String text="";
-		while(text.length()==0){
+		String text = "";
+		while (text.length() == 0) {
 			text = JOptionPane.showInputDialog(menuAutomato);
 		}
 		char option = text.charAt(0);
@@ -62,13 +63,12 @@ public class main {
 	}
 
 	static void expressao() {
-		String text="";
-		while(text.length()==0){
+		String text = "";
+		while (text.length() == 0) {
 			text = JOptionPane.showInputDialog(menuExpressao);
 		}
 		char option = text.charAt(0);
 
-		
 		switch (option) {
 		case 'a': {
 			expressao = InputOutput.criarExpressao("expressao.in");
@@ -87,9 +87,9 @@ public class main {
 			break;
 		}
 		case 'c': {
-			 main(null);
-			 return;
-			
+			main(null);
+			return;
+
 		}
 		default:
 			break;
@@ -99,12 +99,12 @@ public class main {
 	}
 
 	static void gramatica() {
-		String text="";
-		while(text.length()==0){
+		String text = "";
+		while (text.length() == 0) {
 			text = JOptionPane.showInputDialog(menuGramatica);
 		}
 		char option = text.charAt(0);
-		
+
 		switch (option) {
 		case 'a': {
 			gramatica = InputOutput.criarGramatica("gramatica.in");
@@ -128,8 +128,19 @@ public class main {
 	}
 
 	public static void main(String[] args) {
-		String text="";
-		while(text.length()==0){
+
+
+	Automato reservadas = FabricaDeAutomatos.automatoReservadas();
+	
+	
+	System.out.println(reservadas);
+	
+		
+	}
+
+	public static void mainVelho(String[] args) {
+		String text = "";
+		while (text.length() == 0) {
 			text = JOptionPane.showInputDialog(menu);
 		}
 		char option = text.charAt(0);
@@ -152,6 +163,5 @@ public class main {
 		}
 
 	}
-
 
 }

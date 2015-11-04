@@ -285,8 +285,9 @@ public class Automato implements Serializable {
 				try {
 					novo.setEstadoInicial(e.getNome());
 				} catch (Exception e1) {
-//					System.out.println(
-//							"Provavelmente, a remocao de &-transicoes tentou setar um estado que nao existe como inical do automato novo");
+					// System.out.println(
+					// "Provavelmente, a remocao de &-transicoes tentou setar um
+					// estado que nao existe como inical do automato novo");
 					e1.printStackTrace();
 				}
 			} else if (e.isTerminal()) {
@@ -300,35 +301,40 @@ public class Automato implements Serializable {
 
 		novo.alfabeto = new ArrayList<>(this.alfabeto);
 		// Retira o & do alfabeto do novo
-		if (novo.alfabeto.contains('&')) {
-			novo.alfabeto.remove('&');
+		if (novo.alfabeto.contains("&")) {
+			novo.alfabeto.remove("&");
 		} // Retirada do & do alfabeto novo
 
 		for (Iterator<Estado> i = this.estados.iterator(); i.hasNext();) {
 			Estado e = i.next();
-//			System.out.println("Trabalhando com o estado " + e.getNome());
+			// System.out.println("Trabalhando com o estado " + e.getNome());
 			List<Estado> fechoE = e.getEpsilonFecho();
 
 			for (Iterator<Estado> i2 = fechoE.iterator(); i2.hasNext();) {
 				Estado es = i2.next();
-//				System.out.println("EStado atual do &-fecho de " + e.getNome() + ": " + es.getNome());
+				// System.out.println("EStado atual do &-fecho de " +
+				// e.getNome() + ": " + es.getNome());
 
 				for (Iterator<String> i3 = novo.alfabeto.iterator(); i3.hasNext();) {
 					String x = i3.next();
-//					System.out.println("Simbolo a ser analisado: " + x);
+					// System.out.println("Simbolo a ser analisado: " + x);
 					List<Estado> transEsX = es.getTransicoes().get(x);
 					if (transEsX == null) {
-//						System.out.println("O estado " + e.getNome() + " não tem transicao por " + x);
+						// System.out.println("O estado " + e.getNome() + " não
+						// tem transicao por " + x);
 					} else {
-//						System.out.println("es tem " + transEsX.size() + "transicoes por " + x);
+						// System.out.println("es tem " + transEsX.size() +
+						// "transicoes por " + x);
 						// estados que es chega por x
 						for (Iterator<Estado> i4 = transEsX.iterator(); i4.hasNext();) {
 							Estado destino = i4.next();
 							try {
 								novo.addTransicao(e.getNome(), x, destino.getNome());
 							} catch (Exception e1) {
-//								System.out.println(
-//										"O retirador de &-transicoes tentou criar uma transição de/para algum estado que nao existe");
+								// System.out.println(
+								// "O retirador de &-transicoes tentou criar uma
+								// transição de/para algum estado que nao
+								// existe");
 								e1.printStackTrace();
 							}
 						}
