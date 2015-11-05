@@ -49,6 +49,54 @@ public class Automato implements Serializable {
 			}
 		}
 	}
+	 public String getInicial() throws Exception {
+		 Automato a = this;
+	        Set<Estado> set = a.getEstados();
+	        for (Estado e : set) {
+	            if (e.isInicial()) {
+	                return e.getNome();
+	            }
+	        }
+	        throw new Exception("sem estado inicial");
+	    }
+	 public String createSingleEnd() throws Exception {
+		 /**Cria um novo estado final em que todos os outros estados finais transitam
+		  * para ele por & transição. Retorna o estado criado
+		  */
+		 Automato a = this;
+	        Set<Estado> set = a.getEstados();
+	        ArrayList<String> names = new ArrayList<String>();
+	        Set<Estado> finais = new HashSet<Estado>();
+
+	        for (Estado e : set) {
+	            if (e.isTerminal()) {
+	                finais.add(e);
+	            }
+
+	            names.add(e.getNome());
+	        }
+	        if (set.isEmpty()) {
+	            throw new Exception("Sem estado final");
+	        }
+
+	        String nomeFinal = "SS0";
+	        int i = 0;
+	        while (names.contains(nomeFinal)) {
+	            i++;
+	            nomeFinal = "SS";
+	            nomeFinal += i;
+	        }
+
+	        a.addEstado(nomeFinal);
+	        a.addEstadoFinal(nomeFinal);
+
+	        for (Estado e : finais) {
+	            a.addTransicao(e.getNome(), "&", nomeFinal);
+	        }
+
+	        return nomeFinal;
+
+	    }
 
 	public Estado encontrarEstado(String nome) throws Exception {
 		Iterator<Estado> iterator = estados.iterator();
