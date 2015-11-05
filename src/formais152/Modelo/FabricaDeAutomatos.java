@@ -157,5 +157,31 @@ public class FabricaDeAutomatos {
 
 		return aut;
 	}
+	public static Automato analisadorLexico(){
+		Automato aut;
+		aut = automatoConstantes();
+		aut = aut.uniao(automatoReservadas());
+		aut = aut.uniao(automatoVariaveis());
+		aut = aut.uniao(automatoOperadoresBinarios());
+		aut = aut.uniao(automatoMargens());
+		
+		String fim = "";
+		String ini = "";
+		
+		
+		try {
+			fim =aut.createSingleEnd();
+			ini = aut.getInicial();
+
+			//aut.addTransicao(fim, "&", ini);
+			aut.addTransicao(fim, " ", ini);
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+		
+		return aut;
+		
+	}
 
 }
