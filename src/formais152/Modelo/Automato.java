@@ -49,16 +49,7 @@ public class Automato implements Serializable {
 			}
 		}
 	}
-	 public String getInicial() throws Exception {
-		 Automato a = this;
-	        Set<Estado> set = a.getEstados();
-	        for (Estado e : set) {
-	            if (e.isInicial()) {
-	                return e.getNome();
-	            }
-	        }
-	        throw new Exception("sem estado inicial");
-	    }
+	
 	 public String createSingleEnd() throws Exception {
 		 /**Cria um novo estado final em que todos os outros estados finais transitam
 		  * para ele por & transição. Retorna o estado criado
@@ -1231,5 +1222,7 @@ public class Automato implements Serializable {
 		concatenado.setEstadoInicial(this.estadoInicial.getNome());
 		return concatenado;
 	}
+
+	
 
 }
