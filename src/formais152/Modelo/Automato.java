@@ -400,19 +400,19 @@ public class Automato implements Serializable {
 		}
 		Automato novo = this.clone();
 		for (int i = 0; i < novo.estados.size(); i++) {// faz 3 vez
-			for (Iterator<Estado> analizadoi = novo.estados.iterator(); analizadoi.hasNext();) {
-				// para cada estado no novo
-				Estado analizado = analizadoi.next();
+			for(Estado analizado: novo.estados){
 				List<Estado> eTransAnalizado = analizado.getTransicoes().get("&");
 				if (eTransAnalizado == null) {
 					continue;
 				}
-				for (Iterator<Estado> eTransitadoi = eTransAnalizado.iterator(); eTransitadoi.hasNext();) {
-					Estado eTransitado = eTransitadoi.next();
-					// Para cada estado nas &-trans de analizado
+				//for(Estado eTransitado: eTransAnalizado){
+				for(int j=0; j < eTransAnalizado.size();j++){
+					Estado eTransitado = eTransAnalizado.get(j);
+				
 					if (eTransitado.isTerminal()) {
 						analizado.setTerminal(true);
 					}
+					
 					for (String simbolo : novo.getAlfabeto()) {
 						// para cada simbolo no alphabetto
 						List<Estado> destinoTransicoes = eTransitado.getTransicoes().get(simbolo);
@@ -421,9 +421,15 @@ public class Automato implements Serializable {
 						}
 						for (Estado destino : destinoTransicoes) {
 							analizado.addTransicao(simbolo, destino);
+							
+
 						}
 					}
+					
+					
 				}
+				
+				
 			}
 
 		}
