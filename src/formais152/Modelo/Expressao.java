@@ -127,7 +127,7 @@ public class Expressao {
 
                 if (isMod(mod)) {
                     try {
-                        estadoInicial = auto.getInicial();
+                        estadoInicial = auto.getEstadoInicial().getNome();
                         estadoFinal = auto.createSingleEnd();
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
@@ -151,7 +151,7 @@ public class Expressao {
 
                 if (isMod(mod)) {
                     try {
-                        estadoInicial = auto.getInicial();
+                        estadoInicial = auto.getEstadoInicial().getNome();
                         estadoFinal = auto.createSingleEnd();
                     } catch (Exception e) {
                         System.out.println(e.getMessage());

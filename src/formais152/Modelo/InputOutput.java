@@ -212,9 +212,9 @@ public class InputOutput {
 		}
 		return auto;
 	}
-	public static ArrayList<String> readFile(String location){
+	public static String readFile(String location){
 		String line="";
-		ArrayList<String> lista = new ArrayList<String>();
+		String all = "";
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(location));
 			String fullline = br.readLine();
@@ -224,15 +224,8 @@ public class InputOutput {
 				
 				while (line.length() >0) {
 				
-					if(line.contains(" ")){
-						int pos =line.indexOf(" ");
-						String word = line.substring(0,pos);
-						line = line.substring(pos+1);
-						lista.add(word);
-					}else{
-						lista.add(line);
-						break;
-					}
+					all+=line;
+					all+="\n";
 					
 				}
 				fullline = br.readLine();
@@ -242,7 +235,7 @@ public class InputOutput {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return lista;
+		return all;
 		
 	}
 
