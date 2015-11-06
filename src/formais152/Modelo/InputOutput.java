@@ -225,6 +225,7 @@ public class InputOutput {
 				while (line.length() >0) {
 				
 					all+=line;
+					all+="\n";
 					
 				}
 				fullline = br.readLine();

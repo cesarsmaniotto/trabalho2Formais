@@ -245,6 +245,9 @@ public class FabricaDeAutomatos {
 
 			//aut.addTransicao(fim, "&", ini);
 			aut.addTransicao(fim, " ", ini);
+			aut.addTransicao(ini, " ", ini);
+			aut.addTransicao(fim, "\n", ini);
+			aut.addTransicao(ini, "\n", ini);
 		} catch (Exception e) {
 			
 			e.printStackTrace();
