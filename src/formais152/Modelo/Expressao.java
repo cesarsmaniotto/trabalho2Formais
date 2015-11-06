@@ -16,52 +16,7 @@ public class Expressao {
 
     }
 
-    private String getInicial(Automato a) throws Exception {
-        Set<Estado> set = a.getEstados();
-        for (Estado e : set) {
-            String nome = e.getNome();
-            if (e.isInicial()) {
-                return e.getNome();
-            }
-        }
-        throw new Exception("sem estado inicial");
-
-    }
-
-    private String createNewEnd(Automato a) throws Exception {
-        Set<Estado> set = a.getEstados();
-        ArrayList<String> names = new ArrayList<String>();
-        Set<Estado> finais = new HashSet<Estado>();
-
-        for (Estado e : set) {
-            if (e.isTerminal()) {
-                finais.add(e);
-            }
-
-            names.add(e.getNome());
-        }
-        if (set.isEmpty()) {
-            throw new Exception("Sem estado final");
-        }
-
-        String nomeFinal = "SS0";
-        int i = 0;
-        while (names.contains(nomeFinal)) {
-            i++;
-            nomeFinal = "SS";
-            nomeFinal += i;
-        }
-
-        a.addEstado(nomeFinal);
-        a.addEstadoFinal(nomeFinal);
-
-        for (Estado e : finais) {
-            a.addTransicao(e.getNome(), "&", nomeFinal);
-        }
-
-        return nomeFinal;
-
-    }
+   
 
     public Automato obterAutomato() throws Exception {
         String express = expressao;
@@ -172,8 +127,8 @@ public class Expressao {
 
                 if (isMod(mod)) {
                     try {
-                        estadoInicial = getInicial(auto);
-                        estadoFinal = createNewEnd(auto);
+                        estadoInicial = auto.getInicial();
+                        estadoFinal = auto.createSingleEnd();
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
@@ -196,8 +151,8 @@ public class Expressao {
 
                 if (isMod(mod)) {
                     try {
-                        estadoInicial = getInicial(auto);
-                        estadoFinal = createNewEnd(auto);
+                        estadoInicial = auto.getInicial();
+                        estadoFinal = auto.createSingleEnd();
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
