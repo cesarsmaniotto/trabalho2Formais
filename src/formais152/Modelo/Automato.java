@@ -272,7 +272,7 @@ public class Automato implements Serializable {
 
 	}
 
-	public Automato removerEpsilonTransicoes() {
+	public Automato removerEpsilonAntigo2() {
 		Automato novo = new Automato();
 		for (Iterator<Estado> i = this.estados.iterator(); i.hasNext();) {
 			i.next().calculaEpsilonFecho();
@@ -285,9 +285,8 @@ public class Automato implements Serializable {
 				try {
 					novo.setEstadoInicial(e.getNome());
 				} catch (Exception e1) {
-					// System.out.println(
-					// "Provavelmente, a remocao de &-transicoes tentou setar um
-					// estado que nao existe como inical do automato novo");
+					System.out.println(
+							"Provavelmente, a remocao de &-transicoes tentou setar um				 estado que nao existe como inical do automato novo");
 					e1.printStackTrace();
 				}
 			} else if (e.isTerminal()) {
@@ -345,6 +344,204 @@ public class Automato implements Serializable {
 		}
 
 		return novo.determinizar();
+	}
+
+	public Automato removerEpsilonTransicoes() {
+		if (!this.possuiEpsilonTransicao()) {
+			return this;
+		}
+		Automato novo = this.clone();
+		for (int i = 0; i < novo.estados.size(); i++) {// faz 3 vez
+			for (Iterator<Estado> analizadoi = novo.estados.iterator(); analizadoi.hasNext();) {
+				// para cada estado no novo
+				Estado analizado = analizadoi.next();
+				List<Estado> eTransAnalizado = analizado.getTransicoes().get("&");
+				if (eTransAnalizado == null) {
+					continue;
+				}
+				for (Iterator<Estado> eTransitadoi = eTransAnalizado.iterator(); eTransitadoi.hasNext();) {
+					Estado eTransitado = eTransitadoi.next();
+					// Para cada estado nas &-trans de analizado
+					if (eTransitado.isTerminal()) {
+						analizado.setTerminal(true);
+					}
+					for (String simbolo : novo.getAlfabeto()) {
+						// para cada simbolo no alphabetto
+						List<Estado> destinoTransicoes = eTransitado.getTransicoes().get(simbolo);
+						if (destinoTransicoes == null) {
+							continue;
+						}
+						for (Estado destino : destinoTransicoes) {
+							analizado.addTransicao(simbolo, destino);
+						}
+					}
+				}
+			}
+
+		}
+
+		novo.alfabeto.remove("&");
+		return novo.determinizar();
+	}
+
+	public Automato clone() {
+
+		Automato novo = new Automato();
+		try {
+			for (Estado e : this.estados) {
+				novo.addEstado(e.getNome());
+			}
+
+			novo.alfabeto = new ArrayList<>(this.alfabeto);
+
+			for (Estado e : this.estados) {
+				if (e.isInicial()) {
+					novo.addEstado(e.getNome());
+					novo.setEstadoInicial(e.getNome());
+				} else if (e.isTerminal()) {
+					novo.addEstadoFinal(e.getNome());
+				} else {
+					novo.addEstado(e.getNome());
+				}
+			}
+
+			for (Estado e : this.estados) {
+
+				for (String simbolo : this.alfabeto) {
+					List<Estado> destinos = e.getTransicoes().get(simbolo);
+					if (destinos == null) {
+						continue;
+					}
+					for (Estado destino : e.getTransicoes().get(simbolo)) {
+
+						novo.addTransicao(e.getNome(), simbolo, destino.getNome());
+
+					}
+				}
+
+			}
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		}
+		return novo;
+	}
+
+	public Automato removerEpsilonTransicoes3() {
+
+		Automato novo = this.cloneSemEpsilon();
+
+		Estado inicial = novo.getEstadoInicial();
+		inicial.setNome(Estado.montaNomeComposto(inicial.getEpsilonFecho()));
+
+		for (Estado e : novo.estados) {
+			for (String simbolo : novo.getAlfabeto()) {
+				List<Estado> outros = e.getTransicoes().get(simbolo);
+				if (outros.size() == 1) {
+					Estado outro = outros.get(0);
+					List<Estado> eFechoOutro = outro.getEpsilonFecho();
+					boolean eFinal = false;
+					for (Estado estadoFecho : eFechoOutro) {
+						if (estadoFecho.isTerminal()) {
+							eFinal = Boolean.TRUE;
+						}
+					}
+
+					String novoNome = Estado.montaNomeComposto(eFechoOutro);
+					if (eFinal) {
+						// parei por aqui
+					}
+					novo.addEstado(novoNome);
+
+				}
+			}
+		}
+		return novo;
+
+	}
+
+	private String calculaEtrans(Automato novo, String nomeEstado, String simbolo, List<Estado> aVer) {
+		try {
+			Estado analizado = novo.encontrarEstado(nomeEstado);
+
+			List<Estado> transicoesPorSimbolo = analizado.getTransicoes().get(simbolo);
+			if (transicoesPorSimbolo.size() > 1) {
+
+			} else {
+				return Estado.montaNomeComposto(analizado.getEpsilonFecho());
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		return "";
+	}
+
+	/*
+	 * Clona o automato, pondo em cada estado do novo o &-fecho e tira a coluna
+	 * do & (nao determiniza nem remove &-trans)
+	 */
+	public Automato cloneSemEpsilon() {
+		Automato novo = new Automato();
+		for (Estado e : this.getEstados()) {
+			if (e == this.estadoInicial) {// Adicona estado inicial
+
+				novo.addEstado(e.getNome());
+
+				try {
+					novo.setEstadoInicial(e.getNome());
+				} catch (Exception e1) {
+					System.out.println("Clone tentou setar um estado que nao existe como inicial");
+					e1.printStackTrace();
+				}
+
+			} else if (e.isTerminal()) {// Adiciona estados terminais
+				novo.addEstadoFinal(e.getNome());
+			} else {// Adiciona estado normal
+				novo.addEstado(e.getNome());
+			}
+		}
+
+		for (String simbolo : this.alfabeto) {// Adiciona os simbolos do
+												// alfabeto, menos o &
+			if (simbolo != "&") {
+				this.addSimbolo(simbolo);
+			}
+		}
+
+		for (Estado e : this.estados) {// Adiciona todas as transicoes
+			Map<String, List<Estado>> transicoes = e.getTransicoes();
+			for (String simbolo : transicoes.keySet()) {
+				if (simbolo != "&") {
+					List<Estado> outros = transicoes.get(simbolo);
+					for (Estado outro : outros) {
+						try {
+							novo.addTransicao(e.getNome(), simbolo, outro.getNome());
+							;
+						} catch (Exception exc) {
+							System.out.println("Clone tentou criar ma trans de/para algo que nao existe");
+							exc.printStackTrace();
+						}
+
+					}
+				}
+			}
+		}
+		for (Estado e : this.estados) {
+			Estado outro = null;
+			try {
+				outro = novo.encontrarEstado(e.getNome());
+			} catch (Exception exc) {
+				System.out.println("Clone nao achou um estado em novo (Para add as &-fecho)");
+			}
+			if (outro == null) {
+				break;
+			}
+			outro.setEpsilonFecho(e.getEpsilonFecho());
+
+		}
+
+		return novo;
 	}
 
 	public Set<Estado> obterEstadosAlcancaveis() {

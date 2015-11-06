@@ -31,7 +31,7 @@ public class FabricaDeAutomatos {
 			e.printStackTrace();
 		}
 
-		return aut.obterAutomatoMinimo();
+		return aut;
 	}
 
 	public static Automato automatoReservadas() {
@@ -86,11 +86,18 @@ public class FabricaDeAutomatos {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// Automato res = automatoReservadas();
-		// res = res.obterAutomatoFechamento();
 
-		// aut = aut.interseccao(res);
-		// aut = aut.removerEpsilonTransicoes();
+		Automato res = automatoReservadas();
+
+		res = res.obterAutomatoFechamento();
+		System.out.println("AUTOMATO DAS RESEVADAS\n\n" + res + "\n========================\n\n");
+		
+		
+		
+		res = res.removerEpsilonTransicoes();
+		System.out.println("AUTOMATO DAS RESEVADAS sem epsçulo \n\n" + res + "\n========================\n\n");
+		aut = aut.interseccao(res);
+		aut = aut.removerEpsilonTransicoes();
 		// aut = aut.determinizar();
 		aut = aut.obterAutomatoMinimo();
 

@@ -129,13 +129,15 @@ public class main {
 
 	public static void main(String[] args) {
 
+		try {
+			Automato teste = FabricaDeAutomatos.automatoReservadas();
+			System.out.println(teste.removerEpsilonTransicoes());
 
-	Automato reservadas = FabricaDeAutomatos.automatoReservadas();
-	
-	
-	System.out.println(reservadas);
-	
-		
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+		}
 	}
 
 	public static void mainVelho(String[] args) {
