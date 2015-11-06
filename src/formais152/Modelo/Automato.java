@@ -18,6 +18,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Automato implements Serializable {
+	
+	private final String transicaoParaErro = "ERRO";
 
 	private static final long serialVersionUID = 6708950044266477763L;
 
@@ -114,6 +116,14 @@ public class Automato implements Serializable {
 		Estado estadoDe = encontrarEstado(de);
 		Estado estadoPara = encontrarEstado(para);
 		estadoDe.addTransicao(simbolo, estadoPara);
+	}
+	
+	public void addTransicaoErro(Estado estadoErro){
+		
+		for(Estado estado : estados){
+			estado.addTransicao(transicaoParaErro, estadoErro);
+		}
+		
 	}
 
 	public void addSimbolo(String simbolo) {

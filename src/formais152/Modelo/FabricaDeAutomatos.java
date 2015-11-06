@@ -87,21 +87,6 @@ public class FabricaDeAutomatos {
 			e.printStackTrace();
 		}
 
-		Automato res = automatoReservadas();
-
-		res = res.obterAutomatoFechamento();
-		System.out.println("AUTOMATO DAS RESEVADAS\n\n" + res + "\n========================\n\n");
-		
-		
-		
-		res = res.removerEpsilonTransicoes();
-		System.out.println("AUTOMATO DAS RESEVADAS sem epsçulo \n\n" + res + "\n========================\n\n");
-		aut = aut.interseccao(res);
-		aut = aut.removerEpsilonTransicoes();
-		// aut = aut.determinizar();
-		aut = aut.obterAutomatoMinimo();
-
-		// aut = aut.interseccao(res);
 		return aut;
 	}
 
@@ -165,29 +150,40 @@ public class FabricaDeAutomatos {
 		return aut;
 	}
 	public static Automato analisadorLexico(){
-		Automato aut;
-		aut = automatoConstantes();
-		aut = aut.uniao(automatoReservadas());
-		aut = aut.uniao(automatoVariaveis());
-		aut = aut.uniao(automatoOperadoresBinarios());
-		aut = aut.uniao(automatoMargens());
 		
-		String fim = "";
-		String ini = "";
+		Automato aut = automatoVariaveis();
 		
+		Estado erro = new Estado("ERRO");
+		erro.setErro(true);
 		
-		try {
-			fim =aut.createSingleEnd();
-			ini = aut.getInicial();
-
-			//aut.addTransicao(fim, "&", ini);
-			aut.addTransicao(fim, " ", ini);
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-		}
+		aut.addTransicaoErro(erro);
 		
 		return aut;
+		
+		
+//		Automato aut;
+//		aut = automatoConstantes();
+//		aut = aut.uniao(automatoReservadas());
+//		aut = aut.uniao(automatoVariaveis());
+//		aut = aut.uniao(automatoOperadoresBinarios());
+//		aut = aut.uniao(automatoMargens());
+//		
+//		String fim = "";
+//		String ini = "";
+//		
+//		
+//		try {
+//			fim =aut.createSingleEnd();
+//			ini = aut.getInicial();
+//
+//			//aut.addTransicao(fim, "&", ini);
+//			aut.addTransicao(fim, " ", ini);
+//		} catch (Exception e) {
+//			
+//			e.printStackTrace();
+//		}
+//		
+//		return aut;
 		
 	}
 
