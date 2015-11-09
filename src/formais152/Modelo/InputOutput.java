@@ -9,10 +9,7 @@ import java.util.ArrayList;
 
 public class InputOutput {
 
-	
-
-	static private ArrayList<String> getParameters(String line2,
-			String separator) {
+	static private ArrayList<String> getParameters(String line2, String separator) {
 		String line = line2;
 		ArrayList<String> lista = new ArrayList<String>();
 		do {
@@ -21,16 +18,17 @@ public class InputOutput {
 				int pos = line.indexOf(separator);
 				estate = line.substring(0, pos);
 				line = line.substring(pos + 1);
-			}else{
-				line="";
+			} else {
+				line = "";
 			}
 			estate = estate.trim();
 
 			lista.add(estate);
-		} while (line.trim().length()>0);
+		} while (line.trim().length() > 0);
 		return lista;
 	}
-	static public void writeToFile(String text, String location){
+
+	static public void writeToFile(String text, String location) {
 		try {
 			PrintWriter out = new PrintWriter(location);
 			out.print(text);
@@ -82,21 +80,21 @@ public class InputOutput {
 		BufferedReader br = null;
 
 		String line = "";
-		String text="";
+		String text = "";
 		try {
 			br = new BufferedReader(new FileReader(location));
 			line = br.readLine();
 			while (line != null) {
 
 				if (line.length() > 0) {
-					for(int i=0; i< line.length();i++){
-						if(line.charAt(i)!=' ')text+= line.charAt(i);
+					for (int i = 0; i < line.length(); i++) {
+						if (line.charAt(i) != ' ')
+							text += line.charAt(i);
 					}
 				}
 
 				line = br.readLine();
 			}
-			
 
 			br.close();
 		} catch (IOException e) {
@@ -194,13 +192,13 @@ public class InputOutput {
 			 * Leitura das transicoes
 			 */
 			while (line != null) {
-			
-				if( !line.trim().equals("") ){
-					
-					
-					String par =  line.trim();
+
+				if (!line.trim().equals("")) {
+
+					String par = line.trim();
 					ArrayList<String> lista = getParameters(par, ",");
-					if(lista.size()!= 3)return null;
+					if (lista.size() != 3)
+						return null;
 					auto.addTransicao(lista.get(0), lista.get(1), lista.get(2));
 				}
 				line = br.readLine();
@@ -212,21 +210,22 @@ public class InputOutput {
 		}
 		return auto;
 	}
-	public static String readFile(String location){
-		String line="";
+
+	public static String readFile(String location) {
+		String line = "";
 		String all = "";
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(location));
 			String fullline = br.readLine();
-			fullline= fullline.trim();
+			fullline = fullline.trim();
 			while (fullline != null) {
 				line = fullline;
-				
-				while (line.length() >0) {
-				
-					all+=line;
-					all+="\n";
-					
+
+				while (line.length() > 0) {
+
+					all += line;
+					all += "\n";
+
 				}
 				fullline = br.readLine();
 			}
@@ -236,7 +235,7 @@ public class InputOutput {
 			e.printStackTrace();
 		}
 		return all;
-		
+
 	}
 
 }

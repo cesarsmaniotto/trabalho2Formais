@@ -12,13 +12,13 @@ import java.util.TreeMap;
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
 public class Estado implements Comparable<Estado>, Serializable {
-	
+
 	private final String transicaoParaErro = "ERRO";
-	
+
 	private Token tipoToken;
-	
+
 	boolean deterministico = true;
-	
+
 	private static final long serialVersionUID = 3425239595937603665L;
 
 	private String nome;
@@ -26,7 +26,7 @@ public class Estado implements Comparable<Estado>, Serializable {
 	private boolean terminal = false;
 
 	private boolean inicial = false;
-	
+
 	private Map<String, List<Estado>> transicoes = new TreeMap<>();
 
 	private List<Estado> epsilonFecho = new ArrayList<>();
@@ -35,8 +35,8 @@ public class Estado implements Comparable<Estado>, Serializable {
 		super();
 		this.nome = nome;
 	}
-	
-	public Estado(String nome, Token tipoToken){
+
+	public Estado(String nome, Token tipoToken) {
 		this.nome = nome;
 		this.tipoToken = tipoToken;
 	}
@@ -185,15 +185,15 @@ public class Estado implements Comparable<Estado>, Serializable {
 	public List<Estado> transitar(String simbolo) {
 		return transicoes.get(simbolo);
 	}
-	
-	public Estado getTransicao(String simbolo){
-		
-		if(transicoes.containsKey(simbolo)){
+
+	public Estado getTransicao(String simbolo) {
+
+		if (transicoes.containsKey(simbolo)) {
 			return transicoes.get(simbolo).get(0);
 		}
-		
+
 		return transicoes.get(transicaoParaErro).get(0);
-		
+
 	}
 
 	public boolean isDeterministico() {

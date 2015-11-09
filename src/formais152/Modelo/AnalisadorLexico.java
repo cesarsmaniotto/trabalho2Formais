@@ -41,16 +41,13 @@ public class AnalisadorLexico {
 				limiteLexema = apontadorProximo;
 			} else {
 				apontadorProximo += 1;
-				simboloAtual = programa.substring(apontadorProximo - 1,
-						apontadorProximo);
+				simboloAtual = programa.substring(apontadorProximo - 1, apontadorProximo);
 				limiteLexema = apontadorProximo - 1;
 			}
 
-			if (StringUtil.ehNuloOuEspacoEmBranco(simboloAtual)
-					|| fimDoPrograma) {
+			if (StringUtil.ehNuloOuEspacoEmBranco(simboloAtual) || fimDoPrograma) {
 
-				String lexema = programa.substring(apontadorInicioLexema,
-						limiteLexema);
+				String lexema = programa.substring(apontadorInicioLexema, limiteLexema);
 
 				if (estadoAtual.isTerminal()) {
 

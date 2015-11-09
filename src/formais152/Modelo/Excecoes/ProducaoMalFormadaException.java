@@ -8,8 +8,8 @@ package formais152.Modelo.Excecoes;
  *
  */
 public class ProducaoMalFormadaException extends RuntimeException {
-	
-	public ProducaoMalFormadaException(String mensagem){
+
+	public ProducaoMalFormadaException(String mensagem) {
 		super(mensagem);
 	}
 

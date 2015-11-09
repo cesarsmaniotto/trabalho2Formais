@@ -10,11 +10,11 @@ import formais152.main;
  *
  */
 public class Testes {
-	
+
 	public static void main(String[] args) {
-		
+
 		System.out.println(FabricaDeAutomatos.automatoReservadas());
-		
+
 	}
 
 }
