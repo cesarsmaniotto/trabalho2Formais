@@ -18,8 +18,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Automato implements Serializable {
-	
+
 	private final String transicaoParaErro = "ERRO";
+
+	private Estado estadoErro = new Estado(transicaoParaErro, true);
 
 	private static final long serialVersionUID = 6708950044266477763L;
 
@@ -32,9 +34,9 @@ public class Automato implements Serializable {
 	public void addEstado(String nome) {
 		estados.add(new Estado(nome));
 	}
-	
+
 	public void addEstado(String nome, Token tipoToken) {
-		estados.add(new Estado(nome,tipoToken));
+		estados.add(new Estado(nome, tipoToken));
 	}
 
 	public void addEstadoFinal(String nome) {
@@ -55,45 +57,74 @@ public class Automato implements Serializable {
 			}
 		}
 	}
-	
-	 public String createSingleEnd() throws Exception {
-		 /**Cria um novo estado final em que todos os outros estados finais transitam
-		  * para ele por & transição. Retorna o estado criado
-		  */
-		 Automato a = this;
-	        Set<Estado> set = a.getEstados();
-	        ArrayList<String> names = new ArrayList<String>();
-	        Set<Estado> finais = new HashSet<Estado>();
 
-	        for (Estado e : set) {
-	            if (e.isTerminal()) {
-	                finais.add(e);
-	            }
+	public Automato completarEstadoErro() {
+		Automato novo = this.clone();
+		novo.addEstado(transicaoParaErro);
 
-	            names.add(e.getNome());
-	        }
-	        if (set.isEmpty()) {
-	            throw new Exception("Sem estado final");
-	        }
+		if (!novo.isDeterministico()) {
+			if (novo.possuiEpsilonTransicao()) {
+				novo = novo.removerEpsilonTransicoes();
+			}
+			novo = novo.determinizar();
+		}
 
-	        String nomeFinal = "SS0";
-	        int i = 0;
-	        while (names.contains(nomeFinal)) {
-	            i++;
-	            nomeFinal = "SS";
-	            nomeFinal += i;
-	        }
+		// Aqui de garantia ja é deterministico
+		for (Estado e : novo.estados) {
+			for (String simbolo : novo.alfabeto) {
+				if (!e.getTransicoes().containsKey(simbolo)) {
+					try {
+						novo.addTransicao(e.getNome(), simbolo, estadoErro.getNome());
+					} catch (Exception exc) {
+						exc.printStackTrace();
+						System.out.println(
+								"Ao completar o estado de erro, ou a origem ou o estado de erro estao errados lole");
+					}
+				}
+			}
+		}
+		return novo;
+	}
 
-	        a.addEstado(nomeFinal);
-	        a.addEstadoFinal(nomeFinal);
+	public String createSingleEnd() throws Exception {
+		/**
+		 * Cria um novo estado final em que todos os outros estados finais
+		 * transitam para ele por & transição. Retorna o estado criado
+		 */
+		Automato a = this;
+		Set<Estado> set = a.getEstados();
+		ArrayList<String> names = new ArrayList<String>();
+		Set<Estado> finais = new HashSet<Estado>();
 
-	        for (Estado e : finais) {
-	            a.addTransicao(e.getNome(), "&", nomeFinal);
-	        }
+		for (Estado e : set) {
+			if (e.isTerminal()) {
+				finais.add(e);
+			}
 
-	        return nomeFinal;
+			names.add(e.getNome());
+		}
+		if (set.isEmpty()) {
+			throw new Exception("Sem estado final");
+		}
 
-	    }
+		String nomeFinal = "SS0";
+		int i = 0;
+		while (names.contains(nomeFinal)) {
+			i++;
+			nomeFinal = "SS";
+			nomeFinal += i;
+		}
+
+		a.addEstado(nomeFinal);
+		a.addEstadoFinal(nomeFinal);
+
+		for (Estado e : finais) {
+			a.addTransicao(e.getNome(), "&", nomeFinal);
+		}
+
+		return nomeFinal;
+
+	}
 
 	public Estado encontrarEstado(String nome) throws Exception {
 		Iterator<Estado> iterator = estados.iterator();
@@ -112,19 +143,18 @@ public class Automato implements Serializable {
 		Estado estadoPara = encontrarEstado(para);
 		estadoDe.addTransicao(simbolo, estadoPara);
 	}
-	
-	public void addEstadoErro(Estado erro){
-		
-		
-		for(Estado estado : getEstados()){
-			if(!estado.isInicial()){
+
+	public void addEstadoErro(Estado erro) {
+
+		for (Estado estado : getEstados()) {
+			if (!estado.isInicial()) {
 				estado.addTransicao(transicaoParaErro, erro);
 			}
 		}
 		addSimbolo(transicaoParaErro);
 		estados.add(erro);
 	}
-	
+
 	public void addSimbolo(String simbolo) {
 		if (!alfabeto.contains(simbolo)) {
 			alfabeto.add(simbolo);
@@ -409,19 +439,19 @@ public class Automato implements Serializable {
 		}
 		Automato novo = this.clone();
 		for (int i = 0; i < novo.estados.size(); i++) {// faz 3 vez
-			for(Estado analizado: novo.estados){
+			for (Estado analizado : novo.estados) {
 				List<Estado> eTransAnalizado = analizado.getTransicoes().get("&");
 				if (eTransAnalizado == null) {
 					continue;
 				}
-				//for(Estado eTransitado: eTransAnalizado){
-				for(int j=0; j < eTransAnalizado.size();j++){
+				// for(Estado eTransitado: eTransAnalizado){
+				for (int j = 0; j < eTransAnalizado.size(); j++) {
 					Estado eTransitado = eTransAnalizado.get(j);
-				
+
 					if (eTransitado.isTerminal()) {
 						analizado.setTerminal(true);
 					}
-					
+
 					for (String simbolo : novo.getAlfabeto()) {
 						// para cada simbolo no alphabetto
 						List<Estado> destinoTransicoes = eTransitado.getTransicoes().get(simbolo);
@@ -430,21 +460,18 @@ public class Automato implements Serializable {
 						}
 						for (Estado destino : destinoTransicoes) {
 							analizado.addTransicao(simbolo, destino);
-							
 
 						}
 					}
-					
-					
+
 				}
-				
-				
+
 			}
 
 		}
 
 		novo.alfabeto.remove("&");
-		return novo.determinizar();
+		return novo;
 	}
 
 	public Automato clone() {
@@ -1240,7 +1267,5 @@ public class Automato implements Serializable {
 		concatenado.setEstadoInicial(this.estadoInicial.getNome());
 		return concatenado;
 	}
-
-	
 
 }
