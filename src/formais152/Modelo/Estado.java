@@ -12,8 +12,10 @@ import java.util.TreeMap;
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
 public class Estado implements Comparable<Estado>, Serializable {
-
+	
 	private final String transicaoParaErro = "ERRO";
+	
+	private Token tipoToken;
 	
 	boolean deterministico = true;
 	
@@ -25,8 +27,6 @@ public class Estado implements Comparable<Estado>, Serializable {
 
 	private boolean inicial = false;
 	
-	private boolean erro = false;
-
 	private Map<String, List<Estado>> transicoes = new TreeMap<>();
 
 	private List<Estado> epsilonFecho = new ArrayList<>();
@@ -34,6 +34,11 @@ public class Estado implements Comparable<Estado>, Serializable {
 	public Estado(String nome) {
 		super();
 		this.nome = nome;
+	}
+	
+	public Estado(String nome, Token tipoToken){
+		this.nome = nome;
+		this.tipoToken = tipoToken;
 	}
 
 	public void setEpsilonFecho(List<Estado> fechoOutro) {
@@ -133,20 +138,20 @@ public class Estado implements Comparable<Estado>, Serializable {
 		this.terminal = terminal;
 	}
 
+	public Token getTipoToken() {
+		return tipoToken;
+	}
+
+	public void setTipoToken(Token tipoToken) {
+		this.tipoToken = tipoToken;
+	}
+
 	public boolean isInicial() {
 		return inicial;
 	}
 
 	public void setInicial(boolean inicial) {
 		this.inicial = inicial;
-	}
-
-	public boolean isErro() {
-		return erro;
-	}
-
-	public void setErro(boolean erro) {
-		this.erro = erro;
 	}
 
 	public Map<String, List<Estado>> getTransicoes() {

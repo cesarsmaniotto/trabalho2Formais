@@ -1,38 +1,41 @@
 package formais152.Modelo;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class TabelaDeSimbolos {
 	
-	private Map<String,Token> tabela;
+	private Map<String,Token> palavrasReservadas;
+	private List<Pair<String,Token>> tokens;
 	
 	public TabelaDeSimbolos(List<String> palavrasReservadas) {
 		
-		tabela = new HashMap<>();		
+		this.palavrasReservadas = new HashMap<>();		
 		adicionaPalavrasReservadas(palavrasReservadas);
+		tokens = new ArrayList<>();
 	}
 	
 	private void adicionaPalavrasReservadas(List<String> palavrasReservadas){
 		
 		for(String pr : palavrasReservadas){
-			tabela.put(pr, Token.PALAVRA_RESERVADA);
+			this.palavrasReservadas.put(pr, Token.PALAVRA_RESERVADA);
 		}
 		
 	}
 
 	public void adicionaItem(String lexema, Token token){
 		
-		if(tabela.containsKey(lexema)){
-			token = tabela.get(lexema);
+		if(palavrasReservadas.containsKey(lexema)){
+			token = palavrasReservadas.get(lexema);
 		}
 		
-		tabela.put(lexema, token);
+		tokens.add(new Pair<String, Token>(lexema, token));
 	}
 
-	public Map<String, Token> getTabela() {
-		return tabela;
+	public List<Pair<String,Token>> getTokens() {
+		return tokens;
 	}
 
 	

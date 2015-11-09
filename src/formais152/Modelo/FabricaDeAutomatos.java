@@ -115,10 +115,11 @@ public class FabricaDeAutomatos {
 		Automato aut = new Automato();
 		String esFinal = "VAR";
 
-		aut.addEstado("S0");
+		aut.addEstado("S0", Token.IDENTIFICADOR);
 
+		aut.addEstado(esFinal,Token.IDENTIFICADOR);
 		aut.addEstadoFinal(esFinal);
-
+		
 		try {
 			aut.setEstadoInicial("S0");
 			char minusc = 'a';
@@ -210,39 +211,59 @@ public class FabricaDeAutomatos {
 
 		return aut;
 	}
-	public static Automato analisadorLexico(){
-
-		Automato aut;
-		aut = automatoConstantes();
-		aut = aut.uniao(automatoReservadas());
-		aut = aut.uniao(automatoVariaveis());
-		aut = aut.uniao(automatoString());
-		aut = aut.uniao(automatoChar());
-		aut = aut.uniao(automatoOperadoresBinarios());
-		aut = aut.uniao(automatoMargens());
-
+	
+	public static Estado criaEstadoErro(){
 		
-//		Automato aut = automatoVariaveis();
-//		
-//		Estado erro = new Estado("ERRO");
-//		erro.setErro(true);
+		Estado erro = new Estado("ERRO", Token.ERRO);
+		erro.setTerminal(true);
 		
-
-//		aut.addTransicaoErro(erro);
-
-		try {
-			String fim = aut.createSingleEnd();
-			String ini = aut.getEstadoInicial().getNome();
-
-			//aut.addTransicao(fim, "&", ini);
-			aut.addTransicao(fim, " ", ini);
-			aut.addTransicao(ini, " ", ini);
-			aut.addTransicao(fim, "\n", ini);
-			aut.addTransicao(ini, "\n", ini);
-		} catch (Exception e) {
+		char a = '!';
+		for(int i=33; i < 127; i++){
 			
-			e.printStackTrace();
+			erro.addTransicao(String.valueOf(a++), erro);
 		}
+		
+		return erro;
+		
+	}
+	
+	public static Automato montaAutomato(){
+		
+		
+
+//		Automato aut;
+//		aut = automatoConstantes();
+//		aut = aut.uniao(automatoReservadas());
+//		aut = aut.uniao(automatoVariaveis());
+//		aut = aut.uniao(automatoString());
+//		aut = aut.uniao(automatoChar());
+//		aut = aut.uniao(automatoOperadoresBinarios());
+//		aut = aut.uniao(automatoMargens());
+
+		
+		Automato aut = automatoVariaveis();	
+
+		
+
+		aut.addEstadoErro(criaEstadoErro());
+		
+//		System.out.println(aut);
+		
+
+
+//		try {
+//			String fim = aut.createSingleEnd();
+//			String ini = aut.getEstadoInicial().getNome();
+//
+//			//aut.addTransicao(fim, "&", ini);
+//			aut.addTransicao(fim, " ", ini);
+//			aut.addTransicao(ini, " ", ini);
+//			aut.addTransicao(fim, "\n", ini);
+//			aut.addTransicao(ini, "\n", ini);
+//		} catch (Exception e) {
+//			
+//			e.printStackTrace();
+//		}
 
 		
 		return aut;

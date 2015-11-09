@@ -19,75 +19,68 @@ public class AnalisadorLexico {
 
 	public AnalisadorLexico(TabelaDeSimbolos tabela) {
 		this.tabela = tabela;
-		this.automato = FabricaDeAutomatos.analisadorLexico();
+		this.automato = FabricaDeAutomatos.montaAutomato();
 
 	}
 
-	public Map<String, Token> montaTabelaDeSimbolos(String programa) {
+	public void montaTabelaDeSimbolos(String programa) {
 
-		Map<String, Token> simbolos = new HashMap<>();
-
-		int apontadorInicioLexema = 0, apontadorUltimoReconhecido = -1, apontadorProximo = 1;
-
+		int apontadorInicioLexema = 0, apontadorProximo = 0, limiteLexema = 0;
 		String simboloAtual = "";
-
-		boolean voltaAoEstadoInicial = false;
+		boolean voltaAoEstadoInicial = false, fimDoPrograma = false;
 		Estado estadoAtual = automato.getEstadoInicial();
 
-		while (programa.length() >= apontadorProximo) {
+		while (!fimDoPrograma) {
 
 			if (voltaAoEstadoInicial) {
 				estadoAtual = automato.getEstadoInicial();
 			}
 
-			simboloAtual = programa.substring(apontadorProximo - 1, apontadorProximo);
-			estadoAtual = estadoAtual.getTransicao(simboloAtual);
+			if (programa.length() == apontadorProximo) {
+				fimDoPrograma = true;
+				limiteLexema = apontadorProximo;
+			} else {
+				apontadorProximo += 1;
+				simboloAtual = programa.substring(apontadorProximo - 1,
+						apontadorProximo);
+				limiteLexema = apontadorProximo - 1;
+			}
 
-			if (estadoAtual.isTerminal()) {
+			if (StringUtil.ehNuloOuEspacoEmBranco(simboloAtual)
+					|| fimDoPrograma) {
 
-				apontadorUltimoReconhecido = apontadorProximo++;
-				
-				if (programa.length() == apontadorProximo) {
-					String lexema = programa.substring(apontadorInicioLexema, apontadorUltimoReconhecido);
-					simbolos.put(lexema, Token.IDENTIFICADOR);
-				}				
+				String lexema = programa.substring(apontadorInicioLexema,
+						limiteLexema);
 
-			} else if (estadoAtual.isErro()) {
+				if (estadoAtual.isTerminal()) {
 
-				if (apontadorUltimoReconhecido == -1) {
-					String lexema = programa.substring(apontadorInicioLexema, apontadorProximo);
-					apontadorInicioLexema = apontadorProximo++;
-
-					simbolos.put(lexema, Token.ERRO);
+					tabela.adicionaItem(lexema, estadoAtual.getTipoToken());
 				} else {
-					String lexema = programa.substring(apontadorInicioLexema, apontadorUltimoReconhecido);
-
-					apontadorInicioLexema = apontadorUltimoReconhecido;
-					apontadorUltimoReconhecido = -1;
-
-					simbolos.put(lexema, Token.IDENTIFICADOR);
+					tabela.adicionaItem(lexema, Token.ERRO);
 				}
 
 				voltaAoEstadoInicial = true;
-			} else {
-				if (programa.length() == apontadorProximo) {
-					simbolos.put(programa.substring(apontadorInicioLexema, apontadorProximo), Token.ERRO);
-				}
-
-				apontadorProximo += 1;
+				apontadorInicioLexema = apontadorProximo;
 			}
 
-		}
+			estadoAtual = estadoAtual.getTransicao(simboloAtual);
 
-		return simbolos;
+		}
 	}
 
 	public static void main(String[] args) {
 
-		TabelaDeSimbolos tabela = new TabelaDeSimbolos(new ArrayList<>());
+		List<String> palavrasReservadas = new ArrayList<>();
+		palavrasReservadas.add("if");
+		palavrasReservadas.add("else");
+		palavrasReservadas.add("while");
+
+		TabelaDeSimbolos tabela = new TabelaDeSimbolos(palavrasReservadas);
 		AnalisadorLexico anal = new AnalisadorLexico(tabela);
 
-		System.out.println(anal.montaTabelaDeSimbolos("ce;joao9870gggg@"));
+		anal.montaTabelaDeSimbolos("a i c");
+
+		System.out.println(tabela.getTokens());
 
 	}
 

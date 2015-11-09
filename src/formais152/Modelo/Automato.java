@@ -32,6 +32,10 @@ public class Automato implements Serializable {
 	public void addEstado(String nome) {
 		estados.add(new Estado(nome));
 	}
+	
+	public void addEstado(String nome, Token tipoToken) {
+		estados.add(new Estado(nome,tipoToken));
+	}
 
 	public void addEstadoFinal(String nome) {
 		try {
@@ -109,14 +113,18 @@ public class Automato implements Serializable {
 		estadoDe.addTransicao(simbolo, estadoPara);
 	}
 	
-	public void addTransicaoErro(Estado estadoErro){
+	public void addEstadoErro(Estado erro){
 		
-		for(Estado estado : estados){
-			estado.addTransicao(transicaoParaErro, estadoErro);
+		
+		for(Estado estado : getEstados()){
+			if(!estado.isInicial()){
+				estado.addTransicao(transicaoParaErro, erro);
+			}
 		}
-		
+		addSimbolo(transicaoParaErro);
+		estados.add(erro);
 	}
-
+	
 	public void addSimbolo(String simbolo) {
 		if (!alfabeto.contains(simbolo)) {
 			alfabeto.add(simbolo);
