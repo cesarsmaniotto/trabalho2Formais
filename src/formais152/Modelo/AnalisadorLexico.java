@@ -41,16 +41,18 @@ public class AnalisadorLexico {
 				limiteLexema = apontadorProximo;
 			} else {
 				apontadorProximo += 1;
-				simboloAtual = programa.substring(apontadorProximo - 1, apontadorProximo);
+				simboloAtual = programa.substring(apontadorProximo - 1,
+						apontadorProximo);
 				limiteLexema = apontadorProximo - 1;
 			}
 
-			if (StringUtil.ehNuloOuEspacoEmBranco(simboloAtual) || fimDoPrograma) {
+			if (StringUtil.ehNuloOuEspacoEmBranco(simboloAtual)
+					|| fimDoPrograma) {
 
-				String lexema = programa.substring(apontadorInicioLexema, limiteLexema);
+				String lexema = programa.substring(apontadorInicioLexema,
+						limiteLexema);
 
 				if (estadoAtual.isTerminal()) {
-
 					tabela.adicionaItem(lexema, estadoAtual.getTipoToken());
 				} else {
 					tabela.adicionaItem(lexema, Token.ERRO);
@@ -58,27 +60,12 @@ public class AnalisadorLexico {
 
 				voltaAoEstadoInicial = true;
 				apontadorInicioLexema = apontadorProximo;
+			} else {
+				voltaAoEstadoInicial = false;
+				estadoAtual = estadoAtual.getTransicao(simboloAtual);
 			}
 
-			estadoAtual = estadoAtual.getTransicao(simboloAtual);
-
 		}
-	}
-
-	public static void main(String[] args) {
-
-		List<String> palavrasReservadas = new ArrayList<>();
-		palavrasReservadas.add("if");
-		palavrasReservadas.add("else");
-		palavrasReservadas.add("while");
-
-		TabelaDeSimbolos tabela = new TabelaDeSimbolos(palavrasReservadas);
-		AnalisadorLexico anal = new AnalisadorLexico(tabela);
-
-		anal.montaTabelaDeSimbolos("a i c");
-
-		System.out.println(tabela.getTokens());
-
 	}
 
 }

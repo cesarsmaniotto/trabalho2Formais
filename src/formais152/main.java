@@ -127,20 +127,8 @@ public class main {
 
 	}
 
+
 	public static void main(String[] args) {
-
-		try {
-			Automato teste = FabricaDeAutomatos.automatoReservadas();
-			System.out.println(teste.removerEpsilonTransicoes());
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println(e.getMessage());
-		}
-	}
-
-	public static void mainVelho(String[] args) {
 		String text = "";
 		while (text.length() == 0) {
 			text = JOptionPane.showInputDialog(menu);

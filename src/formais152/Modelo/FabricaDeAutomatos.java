@@ -4,109 +4,65 @@ public class FabricaDeAutomatos {
 
 	public static Automato automatoConstantes() {
 		Automato aut = new Automato();
-		String esFinal = "CONST";
+		String estInicCon = "estInicCon", estFinal1Con = "estFinal1Con", estFinal2Con = "estFinal2Con";
 
-		aut.addEstado("S0");
+		aut.addEstado(estInicCon, Token.CONSTANTE_NUMERICA);
+		aut.addEstado(estFinal1Con, Token.CONSTANTE_NUMERICA);
+		aut.addEstado(estFinal2Con, Token.CONSTANTE_NUMERICA);
 
-		aut.addEstadoFinal(esFinal);
-		aut.addEstadoFinal("CONST2");
+		aut.addEstadoFinal(estFinal1Con);
+		aut.addEstadoFinal(estFinal2Con);
 
 		try {
-			aut.setEstadoInicial("S0");
+			aut.setEstadoInicial(estInicCon);
 
 			for (int i = 0; i <= 9; i++) {
 				String simb = "" + i;
 
-				aut.addTransicao("S0", simb, esFinal);
-				aut.addTransicao(esFinal, simb, esFinal);
-				aut.addTransicao("CONST2", simb, "CONST2");
+				aut.addTransicao(estInicCon, simb, estFinal1Con);
+				aut.addTransicao(estFinal1Con, simb, estFinal1Con);
+				aut.addTransicao(estFinal2Con, simb, estFinal2Con);
 			}
-			String simb = ".";
 
-			aut.addTransicao("S0", simb, "CONST2");
-			aut.addTransicao(esFinal, simb, "CONST2");
+			aut.addTransicao(estFinal1Con, ".", estFinal2Con);
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		return aut;
-	}
-
-	public static Automato automatoReservadas() {
-		Expressao exp = InputOutput.criarExpressao("palavrasReservadas.txt");
-		Automato aut = null;
-		try {
-			aut = exp.obterAutomato();
-			aut = aut.removerEpsilonTransicoes();
-
-			aut = aut.obterAutomatoMinimo();
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		return aut;
 	}
 
 	public static Automato automatoString() {
 		Automato aut = new Automato();
-		String esFinal = "STRING";
+		String esInicStr = "esInicStr", estIntermStr = "estIntermStr", esFinalStr = "esFinalStr";
 
-		aut.addEstado("S0");
-		aut.addEstado("S1");
-		aut.addEstado(esFinal);
+		aut.addEstado(esInicStr, Token.STRING);
+		aut.addEstado(estIntermStr, Token.STRING);
+		aut.addEstado(esFinalStr, Token.STRING);
 
-		aut.addEstadoFinal(esFinal);
+		aut.addEstadoFinal(esFinalStr);
 
 		try {
-			aut.setEstadoInicial("S0");
+			aut.setEstadoInicial(esInicStr);
 
-			for (char i = 32; i <= 126; i++) {
-				String simb = "" + i;
+			char c = '!';
+			for (int i = 33; i <= 126; i++) {
 
-				aut.addTransicao("S1", simb, "S1");
+				char c2 = c++;
+
+				if (c2 != '"') {
+					aut.addTransicao(estIntermStr, String.valueOf(c2),
+							estIntermStr);
+				}
+
 			}
 
 			String simb = "\"";
-			aut.addTransicao("S0", simb, "S1");
-			aut.addTransicao("S1", simb, esFinal);
+			aut.addTransicao(esInicStr, simb, estIntermStr);
+			aut.addTransicao(estIntermStr, simb, esFinalStr);
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return aut;
-	}
-
-	public static Automato automatoChar() {
-		Automato aut = new Automato();
-		String esFinal = "CHAR";
-
-		aut.addEstado("S0");
-		aut.addEstado("S1");
-		aut.addEstado("S2");
-		aut.addEstado(esFinal);
-
-		aut.addEstadoFinal(esFinal);
-
-		try {
-			aut.setEstadoInicial("S0");
-
-			for (char i = 32; i <= 126; i++) {
-				String simb = "" + i;
-
-				aut.addTransicao("S1", simb, "S2");
-			}
-
-			String simb = "\"";
-			aut.addTransicao("S0", simb, "S1");
-			aut.addTransicao("S2", simb, esFinal);
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -115,15 +71,15 @@ public class FabricaDeAutomatos {
 
 	public static Automato automatoVariaveis() {
 		Automato aut = new Automato();
-		String esFinal = "VAR";
+		String estInicialVar = "estInicialVar", estFinalVar = "estFinalVar";
 
-		aut.addEstado("S0", Token.IDENTIFICADOR);
+		aut.addEstado(estInicialVar, Token.IDENTIFICADOR);
 
-		aut.addEstado(esFinal, Token.IDENTIFICADOR);
-		aut.addEstadoFinal(esFinal);
+		aut.addEstado(estFinalVar, Token.IDENTIFICADOR);
+		aut.addEstadoFinal(estFinalVar);
 
 		try {
-			aut.setEstadoInicial("S0");
+			aut.setEstadoInicial(estInicialVar);
 			char minusc = 'a';
 			char maiusc = 'A';
 			for (int i = 0; i <= 25; i++) {
@@ -131,21 +87,25 @@ public class FabricaDeAutomatos {
 				char iterMin = minusc++;
 				char iterMaiusc = maiusc++;
 
-				aut.addTransicao("S0", String.valueOf(iterMin), esFinal);
-				aut.addTransicao(esFinal, String.valueOf(iterMin), esFinal);
+				aut.addTransicao(estInicialVar, String.valueOf(iterMin),
+						estFinalVar);
+				aut.addTransicao(estFinalVar, String.valueOf(iterMin),
+						estFinalVar);
 
-				aut.addTransicao("S0", String.valueOf(iterMaiusc), esFinal);
-				aut.addTransicao(esFinal, String.valueOf(iterMaiusc), esFinal);
+				aut.addTransicao(estInicialVar, String.valueOf(iterMaiusc),
+						estFinalVar);
+				aut.addTransicao(estFinalVar, String.valueOf(iterMaiusc),
+						estFinalVar);
 			}
 
 			for (int i = 0; i <= 9; i++) {
 
-				aut.addTransicao(esFinal, String.valueOf(i), esFinal);
+				aut.addTransicao(estFinalVar, String.valueOf(i), estFinalVar);
 			}
 			String simb = "_";
 
-			aut.addTransicao("S0", simb, esFinal);
-			aut.addTransicao(esFinal, simb, esFinal);
+			aut.addTransicao(estInicialVar, simb, estFinalVar);
+			aut.addTransicao(estFinalVar, simb, estFinalVar);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -156,32 +116,26 @@ public class FabricaDeAutomatos {
 
 	public static Automato automatoOperadoresBinarios() {
 		Automato aut = new Automato();
-		String esFinal = "OPERB";
+		String esInicOp = "esInicOp", esFinalOp1 = "esFinalOp1", esFinalOp2 = "esFinalOp2";
 
-		aut.addEstado("S0");
-		aut.addEstado(esFinal);
-		aut.addEstado("OPERB2");
+		aut.addEstado(esInicOp, Token.OPERADOR);
+		aut.addEstado(esFinalOp1, Token.OPERADOR);
+		aut.addEstado(esFinalOp2, Token.OPERADOR);
 
-		aut.addEstadoFinal(esFinal);
-		aut.addEstadoFinal("OPERB2");
-
-		// aut.addEstadoFinal("OPERB_OU");
-		// aut.addEstadoFinal("OPERB_AND");
+		aut.addEstadoFinal(esFinalOp1);
+		aut.addEstadoFinal(esFinalOp2);
 
 		String simbList[] = { "+", "-", "=", "*", "/", "<", ">" };
 		try {
-			aut.setEstadoInicial("S0");
+			aut.setEstadoInicial(esInicOp);
 
 			for (String simb : simbList) {
 
-				aut.addTransicao("S0", simb, "OPERB2");
+				aut.addTransicao(esInicOp, simb, esFinalOp1);
 			}
-			String simb = "=";
-
-			aut.addTransicao("OPERB2", simb, esFinal);
+			aut.addTransicao(esFinalOp1, "=", esFinalOp2);
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -190,101 +144,67 @@ public class FabricaDeAutomatos {
 
 	public static Automato automatoMargens() {
 		Automato aut = new Automato();
-		String esFinal = "MARGEN";
+		String esInicMar = "esInicMar", esFinalMar = "esFinalMar";
 
-		aut.addEstado("S0");
+		aut.addEstado(esInicMar, Token.MARGEM);
+		aut.addEstado(esFinalMar, Token.MARGEM);
 
-		aut.addEstadoFinal(esFinal);
+		aut.addEstadoFinal(esFinalMar);
 
 		String simbList[] = { "(", ")", "[", "]", "{", "}" };
 
 		try {
-			aut.setEstadoInicial("S0");
+			aut.setEstadoInicial(esInicMar);
 
 			for (String simb : simbList) {
 
-				aut.addTransicao("S0", simb, esFinal);
+				aut.addTransicao(esInicMar, simb, esFinalMar);
 			}
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		return aut;
 	}
 
-	public static Estado criaEstadoErro() {
+	public static Automato automatoSeparadorSentenca() {
+		Automato aut = new Automato();
+		String esInicSep = "esInicSep", esFinalSep = "esFinalSep";
 
-		Estado erro = new Estado("ERRO", Token.ERRO);
-		erro.setTerminal(true);
+		aut.addEstado(esInicSep, Token.SEPARADOR);
+		aut.addEstado(esFinalSep, Token.SEPARADOR);
 
-		char a = '!';
-		for (int i = 33; i < 127; i++) {
+		aut.addEstadoFinal(esFinalSep);
 
-			erro.addTransicao(String.valueOf(a++), erro);
+		try {
+			aut.setEstadoInicial(esInicSep);
+
+			aut.addTransicao(esInicSep, ";", esFinalSep);
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
-		return erro;
-
+		return aut;
 	}
 
 	public static Automato montaAutomato() {
 
-		// Automato aut;
-		// aut = automatoConstantes();
-		// aut = aut.uniao(automatoReservadas());
-		// aut = aut.uniao(automatoVariaveis());
-		// aut = aut.uniao(automatoString());
-		// aut = aut.uniao(automatoChar());
-		// aut = aut.uniao(automatoOperadoresBinarios());
-		// aut = aut.uniao(automatoMargens());
-
 		Automato aut = automatoVariaveis();
 
-		aut.addEstadoErro(criaEstadoErro());
+		aut = aut.uniao(automatoConstantes());
+		aut = aut.uniao(automatoMargens());
+		aut = aut.uniao(automatoOperadoresBinarios());
+		aut = aut.uniao(automatoSeparadorSentenca());
+		aut = aut.uniao(automatoString());
 
-		// System.out.println(aut);
+		aut = aut.removerEpsilonTransicoes();
 
-		// try {
-		// String fim = aut.createSingleEnd();
-		// String ini = aut.getEstadoInicial().getNome();
-		//
-		// //aut.addTransicao(fim, "&", ini);
-		// aut.addTransicao(fim, " ", ini);
-		// aut.addTransicao(ini, " ", ini);
-		// aut.addTransicao(fim, "\n", ini);
-		// aut.addTransicao(ini, "\n", ini);
-		// } catch (Exception e) {
-		//
-		// e.printStackTrace();
-		// }
+		aut.getEstadoErro().setTipoToken(Token.ERRO);
+		aut = aut.completarEstadoErro();
 
 		return aut;
-
-		// Automato aut;
-		// aut = automatoConstantes();
-		// aut = aut.uniao(automatoReservadas());
-		// aut = aut.uniao(automatoVariaveis());
-		// aut = aut.uniao(automatoOperadoresBinarios());
-		// aut = aut.uniao(automatoMargens());
-		//
-		// String fim = "";
-		// String ini = "";
-		//
-		//
-		// try {
-		// fim =aut.createSingleEnd();
-		// ini = aut.getInicial();
-		//
-		// //aut.addTransicao(fim, "&", ini);
-		// aut.addTransicao(fim, " ", ini);
-		// } catch (Exception e) {
-		//
-		// e.printStackTrace();
-		// }
-		//
-		// return aut;
 
 	}
 

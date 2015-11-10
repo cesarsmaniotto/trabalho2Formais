@@ -57,6 +57,11 @@ public class Automato implements Serializable {
 			}
 		}
 	}
+	
+
+	public Estado getEstadoErro() {
+		return estadoErro;
+	}
 
 	public Automato completarEstadoErro() {
 		Automato novo = this.clone();
@@ -479,7 +484,7 @@ public class Automato implements Serializable {
 		Automato novo = new Automato();
 		try {
 			for (Estado e : this.estados) {
-				novo.addEstado(e.getNome());
+				novo.addEstado(e.getNome(), e.getTipoToken());
 			}
 
 			novo.alfabeto = new ArrayList<>(this.alfabeto);
@@ -771,16 +776,18 @@ public class Automato implements Serializable {
 			String sufixo = "1";
 			for (Estado estado : estados) {
 				if (estado.isTerminal()) {
+					uniao.addEstado(estado.getNome() + sufixo, estado.getTipoToken());
 					uniao.addEstadoFinal(estado.getNome() + sufixo);
 				} else {
-					uniao.addEstado(estado.getNome() + sufixo);
+					uniao.addEstado(estado.getNome() + sufixo, estado.getTipoToken());
 				}
 				for (Entry<String, List<Estado>> entrada : estado.getTransicoes().entrySet()) {
 					for (Estado filho : entrada.getValue()) {
 						if (filho.isTerminal()) {
+							uniao.addEstado(filho.getNome() + sufixo, filho.getTipoToken());
 							uniao.addEstadoFinal(filho.getNome() + sufixo);
 						} else {
-							uniao.addEstado(filho.getNome() + sufixo);
+							uniao.addEstado(filho.getNome() + sufixo, filho.getTipoToken());
 						}
 						uniao.addTransicao(estado.getNome() + sufixo, entrada.getKey(), filho.getNome() + sufixo);
 					}
@@ -791,16 +798,18 @@ public class Automato implements Serializable {
 			sufixo = "2";
 			for (Estado estado : automato.estados) {
 				if (estado.isTerminal()) {
+					uniao.addEstado(estado.getNome() + sufixo, estado.getTipoToken());
 					uniao.addEstadoFinal(estado.getNome() + sufixo);
 				} else {
-					uniao.addEstado(estado.getNome() + sufixo);
+					uniao.addEstado(estado.getNome() + sufixo, estado.getTipoToken());
 				}
 				for (Entry<String, List<Estado>> entrada : estado.getTransicoes().entrySet()) {
 					for (Estado filho : entrada.getValue()) {
 						if (filho.isTerminal()) {
+							uniao.addEstado(filho.getNome() + sufixo, filho.getTipoToken());
 							uniao.addEstadoFinal(filho.getNome() + sufixo);
 						} else {
-							uniao.addEstado(filho.getNome() + sufixo);
+							uniao.addEstado(filho.getNome() + sufixo, filho.getTipoToken());
 						}
 						uniao.addTransicao(estado.getNome() + sufixo, entrada.getKey(), filho.getNome() + sufixo);
 					}
