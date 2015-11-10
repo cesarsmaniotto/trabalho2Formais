@@ -21,14 +21,16 @@ public class mainT2 {
 	public static void main(String[] args) {
 
 		List<String> palavrasReservadas = new ArrayList<>();
-		palavrasReservadas.add("if");
-		palavrasReservadas.add("else");
-		palavrasReservadas.add("while");
+		String[] palavras = {"for","new","float","int","const","final","static","double","char","bool","long","short","typedef","class","struct","namespace","using","if","else","while","return"};
+		
+		for(String pr : palavras){
+			palavrasReservadas.add(pr);
+		}
 
 		TabelaDeSimbolos tabela = new TabelaDeSimbolos(palavrasReservadas);
 		AnalisadorLexico anal = new AnalisadorLexico(tabela);
 
-		anal.montaTabelaDeSimbolos("\"ee\" if else cesar ( ) == += ; \"aaa");
+		anal.montaTabelaDeSimbolos("int a = 3 ; if ( a > 1 ) { a = 1 ; } else { a = 2 } double b = a + 4 * 2 ; char s = \"stringsemespacos\" ;");
 
 		System.out.println(tabela.getTokens());
 		
