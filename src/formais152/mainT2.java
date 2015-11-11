@@ -26,7 +26,14 @@ public class mainT2 {
 	public static void main(String[] args) {
 
 		List<String> palavrasReservadas = new ArrayList<>();
-		String[] palavras = {"for","new","float","int","const","final","static","double","char","bool","long","short","typedef","class","struct","namespace","using","if","else","while","return"};
+		String[] palavras = {"for","new","float","int","const",
+				"final","static","double","char","bool",
+				"long","short","typedef","class","struct",
+				"namespace","using","if","else","while","return",
+				"and","auto","case","switch","catch","try","continue","break","do",
+				"enum","explicit","false","true","friend","goto","inline","operator",
+				"sizeof","struct","template","this","void","xor"
+				};
 		
 		for(String pr : palavras){
 			palavrasReservadas.add(pr);
