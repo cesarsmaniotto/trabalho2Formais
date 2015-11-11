@@ -221,12 +221,10 @@ public class InputOutput {
 			while (fullline != null) {
 				line = fullline;
 
-				while (line.length() > 0) {
+		
+				all += line;
+				all += " ";
 
-					all += line;
-					all += "\n";
-
-				}
 				fullline = br.readLine();
 			}
 

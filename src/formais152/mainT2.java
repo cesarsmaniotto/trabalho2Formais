@@ -6,8 +6,13 @@ package formais152;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import formais152.Modelo.AnalisadorLexico;
+import formais152.Modelo.InputOutput;
+import formais152.Modelo.Pair;
 import formais152.Modelo.TabelaDeSimbolos;
+import formais152.Modelo.Token;
 
 /**
  * @author cesar
@@ -29,10 +34,20 @@ public class mainT2 {
 
 		TabelaDeSimbolos tabela = new TabelaDeSimbolos(palavrasReservadas);
 		AnalisadorLexico anal = new AnalisadorLexico(tabela);
+		JOptionPane.showConfirmDialog(null, "programa.txt Vai ser compilado");
 
-		anal.montaTabelaDeSimbolos("int a = 3 ; if ( a > 1 ) { a = 1 ; } else { a = 2 } double b = a + 4 * 2 ; char s = \"stringsemespacos\" ;");
+		String input="programa.txt";
+		input = InputOutput.readFile(input);
+		anal.montaTabelaDeSimbolos(input);
+		//anal.montaTabelaDeSimbolos("int a = 3 ; if ( a > 1 ) { a = 1 ; } else { a = 2 } double b = a + 4 * 2 ; char s = \"stringsemespacos\" ;");
 
-		System.out.println(tabela.getTokens());
+		String output="";
+		for (Pair<String,Token> p :tabela.getTokens()){
+			output += p.toString();
+			output+="\n";
+		}
+	InputOutput.writeToFile(output, "output.txt");
+	 System.out.println(output);
 		
 	}
 
